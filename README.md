@@ -59,6 +59,8 @@ dbManager user create <User> <Password>
 *user create* will be used to create user
 
 **_NOTE:_**  The user can access database host both **remotely and locally**
+
+
 **_NOTE:_**  The user doesn't permission to access anything in database host
 
 *Example*:
@@ -76,6 +78,8 @@ dbManager user delete <User>
 *user create* will be used to delete user
 
 **_NOTE:_**   If desired user doesn't exists, It returns ***exit code 1***
+
+
 **_NOTE:_**  The delete user does not revoke user permissions
 
 *Example*:
@@ -127,6 +131,8 @@ dbManager sync <SourceDB> <DestinationDB>
 *sync* sync destination database with source database
 
 **_NOTE:_**  If source database doen't exist, It returns ***exit code 1***
+
+
 **_NOTE:_**  If ddestination database doen't exist, It will ***be created***
 
 *Example*:
@@ -144,6 +150,8 @@ dbManager restore <Database> <Dumpfile>
 *restore* Restore database from a dumpfile
 
 **_NOTE:_**  If dumpfile doen't exist, It returns ***exit code 1***
+
+
 **_NOTE:_**  If database doen't exist, It will ***be created***
 
 *Example*:
