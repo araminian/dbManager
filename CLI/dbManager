@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 set -e
 export DB_MANAGER_WORKDIR=/var/dbManager
 . "$DB_MANAGER_WORKDIR/common"
