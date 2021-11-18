@@ -1,0 +1,71 @@
+set -e
+export DB_MANAGER_WORKDIR=/var/dbManager
+. "$DB_MANAGER_WORKDIR/common"
+
+cli_help() {
+  cli_name=${0##*/}
+  echo "
+DB Manager
+Version: $(cat $DB_MANAGER_WORKDIR/VERSION)
+Usage: $cli_name [command]
+Commands:
+  create    create database
+  drop      drop   database
+  view      view databases and users
+  sync      sync databases
+  user      create,delete users
+  restore   restore a database from dump
+  access    grant,revoke user access to database
+  *         Help
+"
+  exit 1
+}
+
+unsetError=false
+if [ -z ${DB_HOST+x} ]
+then 
+  cli_log "ERROR: DB_HOST is unset"
+  unsetError=true
+fi
+if [ -z ${DB_USER+x} ]
+then 
+  cli_log "ERROR: DB_USER is unset"
+  unsetError=true
+fi
+if [ -z ${DB_PASSWORD+x} ]
+then 
+  cli_log "ERROR: DB_PASSWORD is unset"
+  unsetError=true
+fi
+
+if [ "$unsetError" = true ] ; then
+    cli_log 'EXIT'
+    exit 1
+fi
+
+case "$1" in
+  create)
+    "$DB_MANAGER_WORKDIR/commands/create" "$2" | tee -ia "$DB_MANAGER_WORKDIR/create_${2}.log"
+    ;;
+  view)
+    "$DB_MANAGER_WORKDIR/commands/view" "$@" | tee -ia "$DB_MANAGER_WORKDIR/view.log"
+  ;;
+  restore)
+    "$DB_MANAGER_WORKDIR/commands/restore" "$@" | tee -ia "$DB_MANAGER_WORKDIR/restore.log"
+  ;;
+  sync)
+    "$DB_MANAGER_WORKDIR/commands/sync" "$@" | tee -ia "$DB_MANAGER_WORKDIR/sync.log"
+  ;;
+  user)
+    "$DB_MANAGER_WORKDIR/commands/user" "$@" | tee -ia "$DB_MANAGER_WORKDIR/user.log"
+  ;;
+  access)
+    "$DB_MANAGER_WORKDIR/commands/access" "$@" | tee -ia "$DB_MANAGER_WORKDIR/access.log"
+  ;;
+  drop)
+    "$DB_MANAGER_WORKDIR/commands/drop" "$2" | tee -ia "$DB_MANAGER_WORKDIR/drop_${2}.log"
+  ;;
+  *)
+    cli_help
+    ;;
+esac

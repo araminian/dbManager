@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+set -e
+. "$DB_MANAGER_WORKDIR/common"
+
+shopt -s expand_aliases
+source $DB_MANAGER_WORKDIR/aliases
+
+cli_help_user() {
+  echo "
+Command: user
+Description: Create,Delete Users
+Usage: 
+  user create <username> <password>
+  user delete <usernmae> "
+  exit 1
+}
+
+if [ -z "$2" ]
+then
+    cli_help_user
+else
+     echo ""
+fi
+
+if [[ "$#" -ne 4 && "$#" -ne 3 ]]; then
+    cli_log "Illegal number of parameters"
+    cli_help_user
+fi
+
+case "$2" in
+  
+  create)
+    export USER_NAME=$3
+    export PASSWORD=$4
+    RESULT_VARIABLE="$(msql -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$USER_NAME')")"
+
+    if [ "$RESULT_VARIABLE" = 1 ]; then
+    cli_log "User $USER_NAME exists and can't be created"
+    exit 0
+    else
+        cli_log "User $USER_NAME doesn't exist. Start creating ... "
+        msql -e "CREATE USER '$USER_NAME'@'%' IDENTIFIED BY '$PASSWORD';"
+
+        if [ $? -eq 0 ]; then
+          cli_log "User creation done"
+          exit 0
+        else
+          cli_log "ERROR: User creation failed"
+          exit 1
+        fi
+
+    fi
+    ;;
+  delete)
+    export USER_NAME=$3
+    RESULT_VARIABLE="$(msql -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$USER_NAME')")"
+
+    if [ "$RESULT_VARIABLE" = 1 ]; then
+      cli_log "User $USER_NAME exists and can be deleted"
+    else
+      cli_log "User $USER_NAME deosn't exist"
+      exit 1
+    fi
+
+    msql -e "DROP USER '$USER_NAME'@'%';"
+    if [ $? -eq 0 ]; then
+        cli_log "User delete done"
+        exit 0
+    else
+        cli_log "ERROR: User delete failed"
+        exit 1
+    fi
+    ;;
+  *)
+    cli_help_user
+    ;;
+esac

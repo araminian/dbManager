@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+alias msql="mysql -h ${DB_HOST} -u${DB_USER} -p${DB_PASSWORD}"
+alias mdump="mysqldump -h ${DB_HOST} -u ${DB_USER} --password=${DB_PASSWORD}"
+alias mshow="mysqlshow --user=${DB_USER} --password=${DB_PASSWORD} -h ${DB_HOST}"

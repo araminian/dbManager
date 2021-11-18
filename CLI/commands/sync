@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -e
+. "$DB_MANAGER_WORKDIR/common"
+
+shopt -s expand_aliases
+source $DB_MANAGER_WORKDIR/aliases
+
+cli_help_sync() {
+  echo "
+Command: sync
+Description: sync destination DB with source DB
+Usage: 
+  sync <src-database> <dst-database> "
+  exit 1
+}
+
+if [ -z "$2" ]
+then
+      cli_help_sync
+else
+      echo ""
+fi
+
+if [ "$#" -ne 3 ]; then
+    cli_log "Illegal number of parameters"
+    cli_help_sync
+fi
+
+case "$2" in
+  
+  --help)
+    cli_help_sync
+    ;;
+  *)
+    export SRC_DB=$2
+    export DST_DB=$3
+    cli_log "Sync Databases $SRC_DB -> $DST_DB ..."
+    
+    if mshow $SRC_DB 2> /dev/null ; then
+      cli_log "Src DB $SRC_DB exists"
+    else
+      cli_log "ERROR: Src DB $SRC_DB doesn't exist ..."
+      cli_log "Sync Failed"
+      exit 1
+    fi
+
+    if mshow $3 2> /dev/null ; then
+      cli_log "Dst DB $DST_DB exists"
+    else
+      cli_log "Dst DB $DST_DB doesn't exist ..."
+      cli_log "Create it before restore ..."
+      msql -e "CREATE DATABASE $DST_DB ;"
+    fi
+    
+    mdump $SRC_DB | msql $DST_DB
+    if [ $? -eq 0 ]; then
+      cli_log "Sync Done"
+      exit 0
+    else
+      cli_log "ERROR: Sync Failed"
+      exit 1
+    fi
+    ;;
+esac
