@@ -1,0 +1,35 @@
+image: heiran/dbManager
+auth:
+  DB_HOST: ""
+  DB_USER: ""
+  DB_PASSWORD: ""
+
+restore:
+  dumpFile: ""
+  database: ""
+
+create:
+  database: ""
+
+drop:
+  database: ""
+
+user:
+  create:
+    user: ""
+    password: ""
+  delete:
+    user: ""
+  grant:
+    user: ""
+    database: ""
+  revoke:
+    user: ""
+
+sync:
+  sourceDB: ""
+  destinationDB: ""
+
+view:
+  tables:
+    database: ""
