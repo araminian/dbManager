@@ -4,6 +4,7 @@ metadata:
   name: {{ include "dbmanager.randomname" (list . "viewtable") }}
 spec:
   ttlSecondsAfterFinished: 100
+  backoffLimit: 0
   template:
     spec:
       containers:

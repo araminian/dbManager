@@ -11,6 +11,9 @@ restore:
   dumpFile: ""
   database: ""
 
+exist:
+  database: ""
+  
 create:
   database: ""
 

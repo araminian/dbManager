@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "dbmanager.randomname" (list . "deleteuser") }}
+  name: {{ include "dbmanager.randomname" (list . "viewdb") }}
 spec:
   ttlSecondsAfterFinished: 100
   backoffLimit: 0
@@ -12,9 +12,8 @@ spec:
         image: heiran/dbmanager
         command: 
           - dbManager
-          - user
-          - delete
-          - {{ .Values.user.delete.user }}
+          - exist
+          - {{ .Values.exist.database }}
         env:
           - name: DB_HOST
             value: {{ .Values.auth.DB_HOST | quote }}
