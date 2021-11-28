@@ -41,12 +41,28 @@ dbManager drop <DatabaseName>
 ```   
 *drop* will drop the database
 
-**_NOTE:_**  If desired database doesn't exists, It returns ***exit code 1***
+**_NOTE:_**  *Exit codes*:  Database exist ***exit code 0*** , Database does not exist ***exit code 1***
 
 *Example*:
 ```bash
 # Create database druapl if it exists
 dbManager drop drupal
+```
+
+### exist
+
+*Syntax*: 
+```bash
+dbManager exist <DatabaseName>
+```   
+*exist* check if the database exists
+
+**_NOTE:_**  If desired database doesn't exist, It returns ***exit code 0*** and ***exit code 1*** 
+
+*Example*:
+```bash
+# check if database drupal exists
+dbManager exist drupal
 ```
 
 ### user
@@ -219,7 +235,11 @@ dbManager view tables drupal
  ```bash
 docker run -it --rm --name dbmanager --env DB_HOST=db.production --env DB_USER=armin --env DB_PASSWORD=ThisIsASecret heiran/dbmanager dbManager create test
 ```
+```bash
+# Kubernetes
+kubectl run dbmanager -it --rm --image=heiran/dbmanager --env DB_HOST=<DB> --env DB_USER=<USER> --env DB_PASSWORD=<PASSWORD> -- dbManager view databases
 
+```
 ### Non-container
 
  1. Clone the repository
@@ -235,5 +255,5 @@ docker run -it --rm --name dbmanager --env DB_HOST=db.production --env DB_USER=a
 
 ## TODO
 
- - [ ] Add K8s Job template
+ - [x] Add K8s Job template
  - [ ] ...
