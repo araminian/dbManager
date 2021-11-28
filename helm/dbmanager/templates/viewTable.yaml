@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "dbmanager.randomname" (list . "viewtable") }}
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+      - name: dbmanager
+        image: heiran/dbmanager
+        command: 
+          - dbManager
+          - view
+          - tables
+          - {{ .Values.view.tables.database }}
+        env:
+          - name: DB_HOST
+            value: {{ .Values.auth.DB_HOST | quote }}
+          - name: DB_USER
+            value: {{ .Values.auth.DB_USER | quote }}
+          - name: DB_PASSWORD
+            value: {{ .Values.auth.DB_PASSWORD | quote }}
+      restartPolicy: Never
