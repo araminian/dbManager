@@ -1,4 +1,7 @@
 image: heiran/dbManager
+
+randomString: ""
+
 auth:
   DB_HOST: ""
   DB_USER: ""
