@@ -17,6 +17,7 @@ Commands:
   user      create,delete users
   restore   restore a database from dump
   access    grant,revoke user access to database
+  exist     check if a database exists
   *         Help
 "
   exit 1
@@ -46,25 +47,28 @@ fi
 
 case "$1" in
   create)
-    "$DB_MANAGER_WORKDIR/commands/create" "$2" | tee -ia "$DB_MANAGER_WORKDIR/create_${2}.log"
+    "$DB_MANAGER_WORKDIR/commands/create" "$2"
+    ;;
+  exist)
+    "$DB_MANAGER_WORKDIR/commands/exist" "$2"
     ;;
   view)
-    "$DB_MANAGER_WORKDIR/commands/view" "$@" | tee -ia "$DB_MANAGER_WORKDIR/view.log"
+    "$DB_MANAGER_WORKDIR/commands/view" "$@"
   ;;
   restore)
-    "$DB_MANAGER_WORKDIR/commands/restore" "$@" | tee -ia "$DB_MANAGER_WORKDIR/restore.log"
+    "$DB_MANAGER_WORKDIR/commands/restore" "$@"
   ;;
   sync)
-    "$DB_MANAGER_WORKDIR/commands/sync" "$@" | tee -ia "$DB_MANAGER_WORKDIR/sync.log"
+    "$DB_MANAGER_WORKDIR/commands/sync" "$@"
   ;;
   user)
-    "$DB_MANAGER_WORKDIR/commands/user" "$@" | tee -ia "$DB_MANAGER_WORKDIR/user.log"
+    "$DB_MANAGER_WORKDIR/commands/user" "$@"
   ;;
   access)
-    "$DB_MANAGER_WORKDIR/commands/access" "$@" | tee -ia "$DB_MANAGER_WORKDIR/access.log"
+    "$DB_MANAGER_WORKDIR/commands/access" "$@"
   ;;
   drop)
-    "$DB_MANAGER_WORKDIR/commands/drop" "$2" | tee -ia "$DB_MANAGER_WORKDIR/drop_${2}.log"
+    "$DB_MANAGER_WORKDIR/commands/drop" "$2"
   ;;
   *)
     cli_help
